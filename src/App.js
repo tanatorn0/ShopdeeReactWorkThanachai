@@ -1,4 +1,7 @@
 import './App.css';
+import AddEmployee from './components/AddEmployee';
+import AdminLogin from './components/AdminLogin';
+import EmployeeList from './components/EmployeeList';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import React from 'react';
@@ -8,7 +11,10 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route exact path='/SignIn' element={<SignIn/>} />
+        <Route exact path='/AddEmployee' element={<AddEmployee/>} />
+        <Route exact path='/AdminLogin' element={<AdminLogin/>}/>
+        <Route exact path='/EmployeeList' element={<EmployeeList/>}/>
+        <Route exact path='/SignIn' element={<SignIn/>}/>
         <Route exact path='/SignUp' element={<SignUp/>}/>
       </Routes>
     </Router>
