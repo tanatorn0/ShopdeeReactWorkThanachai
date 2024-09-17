@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Container from '@mui/material/Container';
@@ -8,17 +9,17 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button'; // นำเข้า Button จาก MUI
-import { useNavigate } from 'react-router-dom'; // นำเข้า useNavigate แทน useHistory
+import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 export default function EmployeeList() {
   const [employees, setEmployees] = useState([]);
-  const navigate = useNavigate(); // ใช้ useNavigate แทน useHistory
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const token = localStorage.getItem('token'); // ดึง token จาก local storage
+        const token = localStorage.getItem('token');
         const response = await axios.get('http://localhost:4000/api/employee', {
           headers: {
             Authorization: `Bearer ${token}`
@@ -34,46 +35,44 @@ export default function EmployeeList() {
     fetchEmployees();
   }, []);
 
-  // ฟังก์ชันเพื่อไปหน้า AddEmployee
   const handleAddEmployee = () => {
-    navigate('/AddEmployee'); // เปลี่ยนไปยังเส้นทาง /AddEmployee
+    navigate('/AddEmployee');
   };
 
-  // ฟังก์ชันเพื่อทำการ logout
   const handleLogout = () => {
-    localStorage.removeItem('token'); // ลบ token ออกจาก localStorage
-    navigate('/AdminLogin'); // เปลี่ยนไปยังหน้า login
+    localStorage.removeItem('token');
+    navigate('/AdminLogin');
   };
 
   return (
-    <Container component={Paper} sx={{ mt: 8, p: 4, boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)' }}>
-      <Typography variant="h4" gutterBottom>
+    <Container component={Paper} sx={{ mt: 8, p: 4, boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.15)', borderRadius: 3, backgroundColor: '#f4f6f8' }}>
+      <Typography variant="h4" gutterBottom sx={{ color: 'primary.main', mb: 3 }}>
         รายชื่อพนักงาน
       </Typography>
 
-      {/* ปุ่มกลับไป Add Employee */}
-      <Button variant="contained" color="primary" onClick={handleAddEmployee} sx={{ mr: 2 }}>
-        เพิ่มพนักงาน
-      </Button>
-      
-      {/* ปุ่ม Logout */}
-      <Button variant="contained" color="secondary" onClick={handleLogout}>
-        ออกจากระบบ
-      </Button>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+        <Button variant="contained" color="primary" onClick={handleAddEmployee} sx={{ py: 1.5, px: 3, fontSize: '1rem', textTransform: 'none' }}>
+          เพิ่มพนักงาน
+        </Button>
 
-      <Table sx={{ mt: 3 }}>
-        <TableHead>
+        <Button variant="contained" color="secondary" onClick={handleLogout} sx={{ py: 1.5, px: 3, fontSize: '1rem', textTransform: 'none' }}>
+          ออกจากระบบ
+        </Button>
+      </Box>
+
+      <Table sx={{ mt: 3, backgroundColor: '#ffffff', borderRadius: 2 }}>
+        <TableHead sx={{ backgroundColor: '#1976d2' }}>
           <TableRow>
-            <TableCell>ชื่อผู้ใช้</TableCell>
-            <TableCell>ชื่อจริง</TableCell>
-            <TableCell>นามสกุล</TableCell>
-            <TableCell>อีเมล</TableCell>
-            <TableCell>เพศ</TableCell>
+            <TableCell sx={{ color: '#ffffff', fontWeight: 'bold' }}>ชื่อผู้ใช้</TableCell>
+            <TableCell sx={{ color: '#ffffff', fontWeight: 'bold' }}>ชื่อจริง</TableCell>
+            <TableCell sx={{ color: '#ffffff', fontWeight: 'bold' }}>นามสกุล</TableCell>
+            <TableCell sx={{ color: '#ffffff', fontWeight: 'bold' }}>อีเมล</TableCell>
+            <TableCell sx={{ color: '#ffffff', fontWeight: 'bold' }}>เพศ</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {employees.map((employee) => (
-            <TableRow key={employee.empID}>
+            <TableRow key={employee.empID} sx={{ '&:nth-of-type(odd)': { backgroundColor: '#f9f9f9' } }}>
               <TableCell>{employee.username}</TableCell>
               <TableCell>{employee.firstName}</TableCell>
               <TableCell>{employee.lastName}</TableCell>

@@ -9,8 +9,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from "react";
 import axios from "axios";
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { useNavigate } from 'react-router-dom'; // นำเข้า useNavigate สำหรับการนำทาง
+import PersonAddIcon from '@mui/icons-material/PersonAdd'; // เปลี่ยนไอคอนให้สื่อความหมายมากขึ้น
+import { useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme({
   palette: {
@@ -29,13 +29,13 @@ export default function AddEmployee() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("");
-  const navigate = useNavigate(); // ใช้ useNavigate สำหรับการนำทาง
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const token = localStorage.getItem('token'); // ดึง token จาก local storage
+      const token = localStorage.getItem('token');
       const response = await axios.post('http://localhost:4000/api/employee', {
         username,
         firstName,
@@ -53,7 +53,7 @@ export default function AddEmployee() {
       alert(result['message']);
 
       if (result['status'] === true) {
-        navigate('/EmployeeList'); // เปลี่ยนเส้นทางไปยังหน้า EmployeeList
+        navigate('/EmployeeList');
       }
     } catch (error) {
       console.error('Error adding employee', error);
@@ -61,7 +61,7 @@ export default function AddEmployee() {
   }
 
   const handleViewEmployees = () => {
-    navigate('/EmployeeList'); // นำทางไปยังหน้า EmployeeList เมื่อคลิกปุ่ม
+    navigate('/EmployeeList');
   }
 
   return (
@@ -74,16 +74,16 @@ export default function AddEmployee() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            backgroundColor: '#f3f3f3', // พื้นหลังสีเทาอ่อน
-            borderRadius: 2,
-            padding: 3,
-            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)', // เพิ่มเงา
+            backgroundColor: '#ffffff', // เปลี่ยนพื้นหลังให้เป็นสีขาว
+            borderRadius: 3,
+            padding: 4,
+            boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.2)', // เพิ่มเงาให้เด่นขึ้น
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-            <LockOutlinedIcon />
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <PersonAddIcon /> {/* ใช้ไอคอนที่สื่อถึงการเพิ่มผู้ใช้ */}
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h4" sx={{ color: 'primary.main', mb: 2 }}> {/* ขยายขนาดฟอนต์และปรับสี */}
             เพิ่มพนักงาน
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -153,7 +153,7 @@ export default function AddEmployee() {
               fullWidth
               variant="contained"
               color="primary"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, py: 1.5, fontSize: '1rem' }} // เพิ่มขนาดปุ่มและขนาดฟอนต์
             >
               เพิ่มพนักงาน
             </Button>
@@ -161,7 +161,7 @@ export default function AddEmployee() {
               fullWidth
               variant="outlined"
               color="secondary"
-              sx={{ mt: 2 }}
+              sx={{ mt: 2, py: 1.5, fontSize: '1rem' }}
               onClick={handleViewEmployees}
             >
               ดูข้อมูลพนักงาน

@@ -3,15 +3,14 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from "react";
 import axios from "axios";
+import PersonAddIcon from '@mui/icons-material/PersonAdd'; 
+import { useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme({
   palette: {
@@ -21,20 +20,38 @@ const defaultTheme = createTheme({
     secondary: {
       main: '#ff4081',
     },
+    background: {
+      default: '#f0f4f8',
+    },
+  },
+  typography: {
+    fontFamily: 'Roboto, Arial, sans-serif',
   },
 });
 
-export default function SignIn() {
+export default function AddEmployee() {
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [gender, setGender] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:4000/api/admin/login', {
+      const token = localStorage.getItem('token');
+      const response = await axios.post('http://localhost:4000/api/employee', {
         username,
-        password,
+        firstName,
+        lastName,
+        email,
+        gender
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
 
       const result = response.data;
@@ -42,35 +59,38 @@ export default function SignIn() {
       alert(result['message']);
 
       if (result['status'] === true) {
-        localStorage.setItem('token', result['token']);
-        window.location.href = '/addemployee'; // เปลี่ยนเส้นทางไปยังหน้า AddEmployee
+        navigate('/EmployeeList');
       }
     } catch (error) {
-      console.error('Error logging in', error);
+      console.error('Error adding employee', error);
     }
+  }
+
+  const handleViewEmployees = () => {
+    navigate('/EmployeeList');
   }
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="sm" sx={{ backgroundColor: '#f0f4f8', padding: 2, borderRadius: 3 }}>
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 4,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            backgroundColor: '#f3f3f3', // พื้นหลังสีเทาอ่อน
-            borderRadius: 2,
-            padding: 3,
-            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)', // เพิ่มเงา
+            backgroundColor: '#ffffff', 
+            borderRadius: 3,
+            padding: 4,
+            boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.2)',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-            <LockOutlinedIcon />
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <PersonAddIcon /> 
           </Avatar>
-          <Typography component="h1" variant="h5">
-            เข้าสู่ระบบแอดมิน
+          <Typography component="h1" variant="h4" sx={{ color: 'primary.main', mb: 2 }}> 
+            เพิ่มพนักงาน
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -84,33 +104,78 @@ export default function SignIn() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               autoFocus
-              variant="outlined" // ปรับขอบให้มีเงามากขึ้น
+              variant="outlined"
+              sx={{ backgroundColor: '#f9f9f9', borderRadius: 1 }}
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              name="password"
-              label="รหัสผ่าน"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              id="firstName"
+              label="ชื่อจริง"
+              name="firstName"
+              autoComplete="firstName"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
               variant="outlined"
+              sx={{ backgroundColor: '#f9f9f9', borderRadius: 1 }}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="จำฉันไว้ในระบบ"
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="lastName"
+              label="นามสกุล"
+              name="lastName"
+              autoComplete="lastName"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              variant="outlined"
+              sx={{ backgroundColor: '#f9f9f9', borderRadius: 1 }}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="อีเมล"
+              name="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              variant="outlined"
+              sx={{ backgroundColor: '#f9f9f9', borderRadius: 1 }}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="gender"
+              label="เพศ"
+              name="gender"
+              autoComplete="gender"
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+              variant="outlined"
+              sx={{ backgroundColor: '#f9f9f9', borderRadius: 1 }}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               color="primary"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, py: 1.5, fontSize: '1rem', textTransform: 'none' }}
             >
-              เข้าสู่ระบบ
+              เพิ่มพนักงาน
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="secondary"
+              sx={{ mt: 2, py: 1.5, fontSize: '1rem', textTransform: 'none' }}
+              onClick={handleViewEmployees}
+            >
+              ดูข้อมูลพนักงาน
             </Button>
           </Box>
         </Box>
